@@ -1,3 +1,4 @@
+from distutils.command.clean import clean
 import pandas as pd
 import math
 import random
@@ -62,10 +63,14 @@ def throw_if_nan(arr):
     if any(map(lambda val: math.isnan(val), arr)):
         raise ValueError('Arr contains nan!')
 
-if __name__ == "__main__":
+def get_doge_data():
     raw_data = pd.read_csv('./DOGE-USD.csv', sep=',')
     data = raw_data[["Close"]].to_numpy().T[0]
     clean_data = list(filter(lambda val: not math.isnan(val), data))
+    return clean_data
+
+if __name__ == "__main__":
+    clean_data = get_doge_data()
     bot = SimpleBot()
     sim = Simulator(clean_data, bot, 100)
     end_pos = sim.simulate(0)
